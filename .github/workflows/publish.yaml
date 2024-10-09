@@ -11,6 +11,13 @@ jobs:
   publish-ppa:
     runs-on: ubuntu-latest
     steps:
-    - name: Test
-      run: |
-        echo ${{ github.event.release.tag_name }}
+    - name: Publish PPA
+      uses: twyleg/github_action_publish_ppa_package@main
+      with:
+          repository: "twyleg/playground"
+          upstream_version: ${{ github.event.release.tag_name }}
+          gpg_private_key: ${{ secrets.PPA_GPG_PRIVATE_KEY }}
+          gpg_passphrase: ${{ secrets.PPA_GPG_PASSPHRASE }}
+          tarball: foo
+          deb_email: "mail@twyleg.de"
+          deb_fullname: "Torsten Wylegala"
