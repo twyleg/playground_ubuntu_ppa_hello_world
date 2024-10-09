@@ -1,0 +1,14 @@
+name: Upload PPA Package
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  publish-ppa:
+    - name: Test
+      run: |
+        echo ${{ github.event.release.tag_name }}
