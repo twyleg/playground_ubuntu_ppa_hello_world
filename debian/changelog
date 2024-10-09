@@ -1,0 +1,5 @@
+hello-world (0.0.1-ppa1~ubuntu24.04) oracular; urgency=medium
+
+  * Initial release
+
+ -- Torsten Wylegala <mail@twyleg.de>  Thu, 10 Oct 2024 01:24:15 +0200
