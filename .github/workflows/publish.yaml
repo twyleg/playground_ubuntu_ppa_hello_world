@@ -11,6 +11,9 @@ jobs:
   publish-ppa:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: debian/latest
     - name: Publish PPA
       uses: twyleg/github_action_publish_ppa_package@main
       with:
