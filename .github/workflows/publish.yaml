@@ -24,4 +24,4 @@ jobs:
           tarball: foo
           deb_email: "mail@twyleg.de"
           deb_fullname: "Torsten Wylegala"
-          series: oracular
+          series: "oracular"
