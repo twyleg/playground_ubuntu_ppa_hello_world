@@ -15,7 +15,9 @@ jobs:
       with:
         ref: debian/latest
     - name: Test
-      run: ls -la
+      run: |
+        ls -la
+        git status
     - name: Publish PPA
       uses: twyleg/github_action_publish_ppa_package@main
       with:
