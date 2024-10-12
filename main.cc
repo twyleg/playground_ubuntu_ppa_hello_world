@@ -2,7 +2,7 @@
 #include <iostream>
 
 void print() {
-	std::cout << "Hello World!!!\n\r";
+	std::cout << "Hello World - Foo!!!\n\r";
 }
 
 int main(int argc, char *argv[]) {
