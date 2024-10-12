@@ -16,18 +16,22 @@ jobs:
         ref: debian/latest
         fetch-depth: 0
         fetch-tags: true
-    - name: Test
-      run: |
-        ls -la
-        git status
     - name: Publish PPA
       uses: twyleg/github_action_publish_ppa_package@main
       with:
-          repository: "twyleg/ppa"
-          upstream_version: ${{ github.event.release.tag_name }}
-          gpg_private_key: ${{ secrets.PPA_GPG_PRIVATE_KEY }}
-          gpg_passphrase: ${{ secrets.PPA_GPG_PASSPHRASE }}
-          tarball: foo
-          deb_email: "mail@twyleg.de"
-          deb_fullname: "Torsten Wylegala"
-          series: "oracular"
+        package: "hello-world"
+        repository: "twyleg/ppa"
+        upstream_version: ${{ github.event.release.tag_name }}
+        gpg_private_key: ${{ secrets.PPA_GPG_PRIVATE_KEY }}
+        gpg_passphrase: ${{ secrets.PPA_GPG_PASSPHRASE }}
+        deb_email: "mail@twyleg.de"
+        deb_fullname: "Torsten Wylegala"
+        series: "oracular"
+    - name: Push changes to debian branch
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add debian/changelog
+        git commit -m "New version added"
+        git push origin debian/latest
+        git tag debian/${{ github.event.release.tag_name }}
