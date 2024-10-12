@@ -26,7 +26,7 @@ jobs:
         git config pull.rebase false 
         git pull --commit --no-edit origin master
     - name: Publish PPA
-      uses: twyleg/github_action_publish_ppa_package@main
+      uses: twyleg/github_action_publish_ppa_package@v2
       with:
         package: "hello-world"
         repository: "twyleg/ppa"
