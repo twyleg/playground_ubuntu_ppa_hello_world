@@ -1,3 +1,9 @@
+hello-world (0.0.32-1~ubuntu24.10) oracular; urgency=medium
+
+  * New upstream release
+
+ -- Torsten Wylegala <mail@twyleg.de>  Sat, 12 Oct 2024 21:13:32 +0000
+
 hello-world (0.0.31-1~ubuntu24.10) oracular; urgency=medium
 
   * New upstream release
