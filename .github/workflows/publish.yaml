@@ -20,7 +20,8 @@ jobs:
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git pull --rebase origin master
+        git config pull.rebase false 
+        git pull --commit --no-edit origin master
     - name: Publish PPA
       uses: twyleg/github_action_publish_ppa_package@main
       with:
