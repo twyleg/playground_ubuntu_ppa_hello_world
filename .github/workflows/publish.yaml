@@ -10,6 +10,9 @@ permissions:
 jobs:
   publish-ppa:
     runs-on: ubuntu-latest
+    env:
+      bot_name: github-actions[bot]
+      bot_email: 41898282+github-actions[bot]@users.noreply.github.com
     steps:
     - uses: actions/checkout@v4
       with:
@@ -18,8 +21,8 @@ jobs:
         fetch-tags: true
     - name: Pull upstream changes to debian branch
       run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config user.name "$bot_name"
+        git config user.email "$bot_email"
         git config pull.rebase false 
         git pull --commit --no-edit origin master
     - name: Publish PPA
@@ -35,8 +38,6 @@ jobs:
         series: "oracular"
     - name: Push changes to debian branch
       run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git add debian/changelog
         git commit -m "New version added"
         git tag debian/${{ github.event.release.tag_name }}
