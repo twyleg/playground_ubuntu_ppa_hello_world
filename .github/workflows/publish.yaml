@@ -10,35 +10,15 @@ permissions:
 jobs:
   publish-ppa:
     runs-on: ubuntu-latest
-    env:
-      bot_name: github-actions[bot]
-      bot_email: 41898282+github-actions[bot]@users.noreply.github.com
     steps:
-    - uses: actions/checkout@v4
-      with:
-        ref: debian/latest
-        fetch-depth: 0
-        fetch-tags: true
-    - name: Pull upstream changes to debian branch
-      run: |
-        git config user.name "$bot_name"
-        git config user.email "$bot_email"
-        git config pull.rebase false 
-        git pull --commit --no-edit origin master
     - name: Publish PPA
-      uses: twyleg/github_action_publish_ppa_package@v2
+      uses: twyleg/github_action_publish_ppa_package@main
       with:
-        package: "hello-world"
-        repository: "twyleg/ppa"
-        upstream_version: ${{ github.event.release.tag_name }}
-        gpg_private_key: ${{ secrets.PPA_GPG_PRIVATE_KEY }}
-        gpg_passphrase: ${{ secrets.PPA_GPG_PASSPHRASE }}
+        ppa_package: "hello-world"
+        ppa_repository: "twyleg/ppa"
         deb_email: "mail@twyleg.de"
         deb_fullname: "Torsten Wylegala"
+        gpg_private_key: ${{ secrets.PPA_GPG_PRIVATE_KEY }}
+        gpg_passphrase: ${{ secrets.PPA_GPG_PASSPHRASE }}
+        upstream_version: ${{ github.event.release.tag_name }}
         series: "oracular"
-    - name: Push changes to debian branch
-      run: |
-        git add debian/changelog
-        git commit -m "New version added"
-        git tag debian/${{ github.event.release.tag_name }}
-        git push --tags origin debian/latest
