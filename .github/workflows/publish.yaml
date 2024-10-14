@@ -15,7 +15,7 @@ jobs:
       uses: twyleg/github_action_publish_ppa_package@v2.0.1
       with:
         ppa_package: "hello-world"
-        ppa_repository: "twyleg/ppa"
+        ppa_repository: "twyleg/playground"
         deb_email: "mail@twyleg.de"
         deb_fullname: "Torsten Wylegala"
         gpg_private_key: ${{ secrets.PPA_GPG_PRIVATE_KEY }}
