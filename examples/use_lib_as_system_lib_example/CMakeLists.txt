@@ -31,5 +31,5 @@ set_target_properties(${TARGET_NAME}
 # link against libs
 #
 target_link_libraries(${TARGET_NAME}
-    hello_world::core_shared
+    hello_world::core
 )

@@ -6,4 +6,5 @@ apt-get update
 apt-get install -y \
     build-essential \
     libfmt-dev \
-    cmake
+    cmake \
+    fish

@@ -1,9 +1,9 @@
 # Copyright (C) 2024 twyleg
-set(TARGET_NAME hello_world)
+set(TARGET_NAME hello_world_example)
 
 
 #
-# add source files to target
+# Add source files to target
 #
 add_executable(${TARGET_NAME}
     main.cc
@@ -11,17 +11,17 @@ add_executable(${TARGET_NAME}
 
 
 #
-# set target properties
+# Set target properties
 #
 set_target_properties(${TARGET_NAME}
     PROPERTIES
-    CXX_STANDARD 17
-    INCLUDE_CURRENT_DIR ON
+        CXX_STANDARD 17
+        INCLUDE_CURRENT_DIR ON
 )
 
 
 #
-# link against libs
+# Link against libs
 #
 target_link_libraries(${TARGET_NAME}
     hello_world::core
