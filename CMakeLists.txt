@@ -10,39 +10,45 @@ project(hello_world LANGUAGES CXX VERSION 0.0.1)
 # Libs
 add_subdirectory(libs/hello_world/core/)
 
-# Apps
+
+message("Boo: ${hello_world_core_local}")
+
+# # Apps
 add_subdirectory(apps/hello_world)
 
-# Unit-Test
-# add_subdirectory(unit_tests/)
+# # Unit-Test
+# # add_subdirectory(unit_tests/)
 
+get_property(allTargets DIRECTORY PROPERTY BUILDSYSTEM_TARGETS)
+foreach(target IN LISTS allTargets)
+    message(STATUS "Target: ${target}")
+endforeach()
 
+# install(
+#     TARGETS core_shared core_static
+#     EXPORT HelloWorldTargets
+#     FILE_SET HEADERS
+#     LIBRARY DESTINATION lib
+#     ARCHIVE DESTINATION lib
+#     RUNTIME DESTINATION bin
+#     INCLUDES DESTINATION include
+# )
 
-install(
-    TARGETS core_shared core_static
-    EXPORT HelloWorldTargets
-    FILE_SET HEADERS
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-    RUNTIME DESTINATION bin
-    INCLUDES DESTINATION include
-)
+# install(
+#     EXPORT HelloWorldTargets
+#     FILE HelloWorldTargets.cmake
+#     NAMESPACE hello_world::
+#     DESTINATION lib/cmake/HelloWorld
+# )
 
-install(
-    EXPORT HelloWorldTargets
-    FILE HelloWorldTargets.cmake
-    NAMESPACE hello_world::
-    DESTINATION lib/cmake/HelloWorld
-)
+# include(CMakePackageConfigHelpers)
+# write_basic_package_version_file(
+#     "HelloWorldConfigVersion.cmake"
+#     VERSION 0.0.1
+#     COMPATIBILITY AnyNewerVersion
+# )
 
-include(CMakePackageConfigHelpers)
-write_basic_package_version_file(
-    "HelloWorldConfigVersion.cmake"
-    VERSION 0.0.1
-    COMPATIBILITY AnyNewerVersion
-)
-
-install(
-    FILES "cmake/HelloWorldConfig.cmake" "${CMAKE_CURRENT_BINARY_DIR}/HelloWorldConfigVersion.cmake"
-    DESTINATION lib/cmake/HelloWorld
-)
+# install(
+#     FILES "cmake/HelloWorldConfig.cmake" "${CMAKE_CURRENT_BINARY_DIR}/HelloWorldConfigVersion.cmake"
+#     DESTINATION lib/cmake/HelloWorld
+# )
