@@ -1,0 +1,24 @@
+name: Upload PPA Package
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  publish-ppa:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Publish PPA
+      uses: twyleg/github_action_publish_ppa_package@v2.0.1
+      with:
+        ppa_package: "hello-world"
+        ppa_repository: "twyleg/playground"
+        deb_email: "mail@twyleg.de"
+        deb_fullname: "Torsten Wylegala"
+        gpg_private_key: ${{ secrets.PPA_GPG_PRIVATE_KEY }}
+        gpg_passphrase: ${{ secrets.PPA_GPG_PASSPHRASE }}
+        upstream_version: ${{ github.event.release.tag_name }}
+        series: "oracular"

@@ -1,7 +1,7 @@
-[![Build status](https://github.com/twyleg/template_project_cpp/actions/workflows/unit_tests.yaml/badge.svg)]()
-[![GitHub latest commit](https://badgen.net/github/last-commit/twyleg/template_project_cpp)](https://GitHub.com/twyleg/template_project_cpp/commit/)
+[![Build status](https://github.com/twyleg/hello_world/actions/workflows/unit_tests.yaml/badge.svg)]()
+[![GitHub latest commit](https://badgen.net/github/last-commit/twyleg/hello_world)](https://GitHub.com/twyleg/hello_world/commit/)
 
-# template_project_cpp
+# hello_world
 
 Simple CMake based template for a common C++ project.
 
@@ -14,7 +14,7 @@ The template is based on the following components:
 * googletest
 * fmt
 
-See [scripts/](https://github.com/twyleg/template_project_cpp/tree/master/scripts) for dependency install scripts for multiple distributions.
+See [scripts/](https://github.com/twyleg/hello_world/tree/master/scripts) for dependency install scripts for multiple distributions.
 
 GoogleTest is pulled in as a git submodule to avoid problems with missing cmake files in sub distributions.
 
@@ -22,8 +22,8 @@ GoogleTest is pulled in as a git submodule to avoid problems with missing cmake 
 
 Clone, prepare and build with the following steps:
 
-	git clone git@github.com:twyleg/template_project_cpp.git
-	cd template_project_cpp
+	git clone git@github.com:twyleg/hello_world.git
+	cd hello_world
 
 	git submodule update --init
 	

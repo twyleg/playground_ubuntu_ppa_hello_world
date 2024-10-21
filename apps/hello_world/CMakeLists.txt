@@ -1,5 +1,5 @@
-# Copyright (C) 2023 twyleg
-set(TARGET_NAME unit_tests)
+# Copyright (C) 2024 twyleg
+set(TARGET_NAME hello_world)
 
 
 #
@@ -7,7 +7,6 @@ set(TARGET_NAME unit_tests)
 #
 add_executable(${TARGET_NAME}
     main.cc
-    example_class_test.cc
 )
 
 
@@ -16,8 +15,8 @@ add_executable(${TARGET_NAME}
 #
 set_target_properties(${TARGET_NAME}
     PROPERTIES
-	CXX_STANDARD 17
-	INCLUDE_CURRENT_DIR ON
+    CXX_STANDARD 17
+    INCLUDE_CURRENT_DIR ON
 )
 
 
@@ -26,8 +25,4 @@ set_target_properties(${TARGET_NAME}
 #
 target_link_libraries(${TARGET_NAME}
     hello_world::core
-	GTest::gmock
-	GTest::gtest
-	GTest::gmock_main
-	GTest::gtest_main
 )

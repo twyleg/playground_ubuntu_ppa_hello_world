@@ -1,9 +1,9 @@
 // Copyright (C) 2023 twyleg
 #include <gtest/gtest.h>
 
-#include <template_project_cpp/core/example_class.h>
+#include <hello_world/core/example_class.h>
 
-namespace template_project_cpp::Testing {
+namespace hello_world::Testing {
 
 class ExampleClassTest : public ::testing::Test {
 
@@ -19,7 +19,7 @@ public:
 
 protected:
 
-	template_project_cpp::core::ExampleClass mExampleClass;
+	hello_world::core::ExampleClass mExampleClass;
 
 };
 
