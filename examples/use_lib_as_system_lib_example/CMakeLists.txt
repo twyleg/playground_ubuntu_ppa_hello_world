@@ -1,7 +1,7 @@
 # Copyright (C) 2024 twyleg
 cmake_minimum_required(VERSION 3.16.3)
 
-set(TARGET_NAME use_lib_as_local_target_example)
+set(TARGET_NAME use_lib_as_system_lib_example)
 
 project(${TARGET_NAME})
 

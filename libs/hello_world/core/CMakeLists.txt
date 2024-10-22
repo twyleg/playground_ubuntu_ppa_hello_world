@@ -33,23 +33,21 @@ find_package(fmt REQUIRED)
 #
 # Create library targets
 #
-add_library(${TARGET_NAME}
-    ${SOURCES}
-    ${HEADERS}
-)
-
+add_library(${TARGET_NAME} ${SOURCES} ${HEADERS})
 add_library("${PROJECT}::${COMPONENT}" ALIAS ${TARGET_NAME})
 
-target_sources(${TARGET_NAME}
-    PRIVATE
-        ${SOURCES}
-    PUBLIC
-        FILE_SET HEADERS
-            BASE_DIRS
-                ${CMAKE_CURRENT_SOURCE_DIR}/../../
-            FILES
-                ${HEADERS}
-)
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.23.0")
+
+    target_sources(${TARGET_NAME}
+        PUBLIC
+            FILE_SET HEADERS
+                BASE_DIRS
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../../
+                FILES
+                    ${HEADERS}
+    )
+
+endif()
 
 
 #

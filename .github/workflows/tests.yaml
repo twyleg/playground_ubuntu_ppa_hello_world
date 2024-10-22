@@ -56,12 +56,13 @@ jobs:
     - name: 'Install dependencies (Arch)'
       if: ${{ contains('archlinux:latest', matrix.image) }}
       run: bash scripts/install_dependencies_arch.sh
-    - name: 'Build'
+    - name: 'Build and install'
       run: |
         mkdir build/
         cd build/
-        cmake ..
-        make -j3
+        cmake .. -DBUILD_SHARED_LIBS=ON
+        cmake --build . -- -j3
+        cmake --install . --prefix /usr
     - name: 'Run unit-tests'
       run: |
         cd build/unit_tests/
@@ -70,3 +71,21 @@ jobs:
       run: |
         cd build/apps/hello_world_example/
         ./hello_world_example
+    - name: 'Run library-use-tests - lib as local target'
+      run: |
+        cd examples/use_lib_as_local_target_example/
+        mkdir build
+        cd build/
+        cmake ..
+        cmake --build . -- -j3
+        ./use_lib_as_local_target_example
+    - name: 'Run library-use-tests - lib as system lib'
+      run: |
+        cd examples/use_lib_as_system_lib_example/
+        mkdir build
+        cd build/
+        cmake ..
+        cmake --build . -- -j3
+        ./use_lib_as_system_lib_example
+
+
