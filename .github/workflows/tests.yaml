@@ -68,5 +68,5 @@ jobs:
         ./unit_tests
     - name: 'Run smoke-test'
       run: |
-        cd build/apps/hello_world/
+        cd build/apps/hello_world_example/
         ./hello_world_example
