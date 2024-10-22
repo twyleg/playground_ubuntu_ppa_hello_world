@@ -69,4 +69,4 @@ jobs:
     - name: 'Run smoke-test'
       run: |
         cd build/apps/hello_world/
-        ./hello_world --version
+        ./hello_world_example
