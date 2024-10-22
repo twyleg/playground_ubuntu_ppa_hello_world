@@ -10,7 +10,6 @@ Simple CMake based template for a common C++ project.
 The template is based on the following components:
 
 * CMake
-* boost
 * googletest
 * fmt
 
@@ -32,3 +31,25 @@ Clone, prepare and build with the following steps:
 	cmake ../
 	make
 
+## Testing
+
+### Unit tests
+
+Unit tests are located in [unit_tests](unit_tests) and based on googletest.
+
+    cd build/
+    cmake ../
+    make
+    unit_tests/unit_tests
+    
+
+
+### CI/CD
+
+GitHub Actions are used for CI/CD. main tasks are continous testing and deployment.
+Actions can be run locally with [act](https://github.com/nektos/act).
+
+For example: To run the *smoke-test-linux* job on *ubuntu:jammy*, run the following command:
+
+    sudo act -j smoke-tests-linux --matrix image:ubuntu:jammy
+    
