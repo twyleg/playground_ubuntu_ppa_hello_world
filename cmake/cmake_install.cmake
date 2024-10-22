@@ -31,7 +31,7 @@ write_basic_package_version_file(
 
 install(
     FILES
-        "cmake/HelloWorldConfig.cmake"
+        "${CMAKE_SOURCE_DIR}/cmake/HelloWorldConfig.cmake"
         "${CMAKE_CURRENT_BINARY_DIR}/HelloWorldConfigVersion.cmake"
     DESTINATION "lib/cmake/HelloWorld"
 )
