@@ -1,77 +1,34 @@
 # Copyright (C) 2024 twyleg
-set(COMPONENT core)
-set(PROJECT hello_world)
+set(COMPONENT_NAME core)
+set(PROJECT_NAME hello_world)
 
+include(${CMAKE_CURRENT_SOURCE_DIR}/../../../cmake/helper.cmake)
 
-if(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT})
-    set(TARGET_NAME "${COMPONENT}")
+if(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
+    set(TARGET_NAME "${COMPONENT_NAME}")
 else()
-    set(TARGET_NAME "${PROJECT}_${COMPONENT}")
+    set(TARGET_NAME "${PROJECT_NAME}_${COMPONENT_NAME}")
 endif()
 
-
-#
-# Define source and header files
-#
-set(SOURCES
-    hello_world.cc
-    hello_world_fmt.cc
-)
-
-set(HEADERS
-    hello_world.h
-    hello_world_fmt.h
-)
-
-
-#
-# Find packages
-#
-find_package(fmt REQUIRED)
-
-
-#
-# Create library targets
-#
-add_library(${TARGET_NAME} ${SOURCES} ${HEADERS})
-add_library("${PROJECT}::${COMPONENT}" ALIAS ${TARGET_NAME})
-
-if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.23.0")
-
-    target_sources(${TARGET_NAME}
-        PUBLIC
-            FILE_SET HEADERS
-                BASE_DIRS
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../../
-                FILES
-                    ${HEADERS}
-    )
-
-endif()
-
-
-#
-# Set target properties
-#
-set_target_properties(${TARGET_NAME}
+create_library(${TARGET_NAME}
+    ALIAS
+        ${PROJECT_NAME}::${COMPONENT_NAME}
+    SOURCES
+        hello_world.cc
+        hello_world_fmt.cc
+    HEADERS
+        hello_world.h
+        hello_world_fmt.h
     PROPERTIES
-        CXX_STANDARD 17
+        CXX_STANDARD 20
         INCLUDE_CURRENT_DIR ON
         POSITION_INDEPENDENT_CODE 1
-)
-
-
-#
-# Link against libs
-#
-target_link_libraries(${TARGET_NAME}
-    fmt::fmt
-)
-
-
-#
-# Add parent-parent folder to targets include directories
-#
-target_include_directories(${TARGET_NAME}
-    PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../>"
+    INCLUDE_DIRECTORIES
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../
+    FIND_PACKAGES
+        "fmt REQUIRED"
+        "Boost COMPONENTS REQUIRED system"
+    LINK_LIBRARIES
+        PUBLIC fmt::fmt
+        PRIVATE Boost::system
 )

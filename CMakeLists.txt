@@ -14,7 +14,7 @@ add_subdirectory(libs/)
 # Apps
 add_subdirectory(apps/hello_world_example/)
 
-# Unit-Test
+# # Unit-Test
 add_subdirectory(unit_tests/)
 
 # Include install config
