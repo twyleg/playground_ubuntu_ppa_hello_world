@@ -1,28 +1,13 @@
 # Copyright (C) 2024 twyleg
-set(TARGET_NAME hello_world_example)
 
+include(${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/helper.cmake)
 
-#
-# Add source files to target
-#
-add_executable(${TARGET_NAME}
-    main.cc
-)
-
-
-#
-# Set target properties
-#
-set_target_properties(${TARGET_NAME}
+create_application(hello_world_example
+    SOURCES
+        main.cc
     PROPERTIES
         CXX_STANDARD 17
         INCLUDE_CURRENT_DIR ON
-)
-
-
-#
-# Link against libs
-#
-target_link_libraries(${TARGET_NAME}
-    hello_world::core
+    LINK_LIBRARIES
+        hello_world::core
 )
