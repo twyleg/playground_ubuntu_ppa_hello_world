@@ -1,0 +1,7 @@
+build/
+lobs/
+**/build
+
+**/*.kate-swp
+**/*.autosave
+CMakeLists.txt.user

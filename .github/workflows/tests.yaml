@@ -1,0 +1,90 @@
+name: tests
+run-name: tests
+on:
+  workflow_call:
+
+  push:
+    branches:
+      - "**"
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout repository'
+      uses: actions/checkout@v3
+      with:
+        submodules: true
+    - name: 'Install dependencies'
+      run: sudo bash scripts/install_dependencies_debian_ubuntu.sh
+    - name: 'Build'
+      run: |
+        mkdir build/
+        cd build/
+        cmake ..
+        make -j3
+    - name: 'Run tests'
+      run: |
+        cd build/unit_tests/
+        ./unit_tests
+        
+  smoke-tests-linux:
+    strategy:
+      fail-fast: false
+      matrix:
+        image: [ 'ubuntu:focal', 'ubuntu:jammy', 'debian:latest', 'archlinux:latest' ]
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ matrix.image }}
+      env:
+        TZ: Europe/Berlin
+    steps:
+    - name: 'Install git (Ubuntu, Debian)'
+      if: ${{ contains(fromJSON('["ubuntu:focal", "ubuntu:jammy", "debian:latest"]'), matrix.image) }}
+      run: apt-get update && apt-get install -y git
+    - name: 'Install git (Arch)'
+      if: ${{ contains('archlinux:latest', matrix.image) }}
+      run: pacman -Syu --noconfirm git
+    - name: 'Checkout repository'
+      uses: actions/checkout@v3
+      with:
+        submodules: true
+    - name: Setup timezone
+      run: ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+    - name: 'Install dependencies (Ubuntu, Debian)'
+      if: ${{ contains(fromJSON('["ubuntu:focal", "ubuntu:jammy", "debian:latest"]'), matrix.image) }}
+      run:  bash scripts/install_dependencies_debian_ubuntu.sh
+    - name: 'Install dependencies (Arch)'
+      if: ${{ contains('archlinux:latest', matrix.image) }}
+      run: bash scripts/install_dependencies_arch.sh
+    - name: 'Build and install'
+      run: |
+        mkdir build/
+        cd build/
+        cmake .. -DBUILD_SHARED_LIBS=ON
+        cmake --build . -- -j3
+        cmake --install . --prefix /usr
+    - name: 'Run smoke-test: Internal application'
+      run: |
+        cd build/apps/hello_world_example/
+        ldd ./hello_world_example
+        ./hello_world_example
+    - name: 'Run smoke-test: External application - Library pulled in as submodule'
+      run: |
+        cd examples/use_lib_as_local_target_example/
+        mkdir build
+        cd build/
+        cmake ..
+        cmake --build . -- -j3
+        ldd ./use_lib_as_local_target_example
+        ./use_lib_as_local_target_example
+    - name: 'Run smoke-test: External application - Library pulled in as system library via find_package'
+      run: |
+        cd examples/use_lib_as_system_lib_example/
+        mkdir build
+        cd build/
+        cmake ..
+        cmake --build . -- -j3
+        ldd ./use_lib_as_system_lib_example
+        ./use_lib_as_system_lib_example
+
+
