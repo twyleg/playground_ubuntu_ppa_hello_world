@@ -2,15 +2,14 @@
 set(COMPONENT_NAME core)
 set(PROJECT_NAME hello_world)
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/../../../cmake/helper.cmake)
-
 if(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
     set(TARGET_NAME "${COMPONENT_NAME}")
 else()
     set(TARGET_NAME "${PROJECT_NAME}_${COMPONENT_NAME}")
 endif()
 
-create_library(${TARGET_NAME}
+simple_cpp_project_create_library(
+    ${TARGET_NAME}
     ALIAS
         ${PROJECT_NAME}::${COMPONENT_NAME}
     SOURCES

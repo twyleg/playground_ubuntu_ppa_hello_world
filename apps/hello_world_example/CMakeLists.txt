@@ -1,8 +1,6 @@
 # Copyright (C) 2024 twyleg
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/helper.cmake)
-
-create_application(hello_world_example
+simple_cpp_project_create_application(hello_world_example
     SOURCES
         main.cc
     PROPERTIES
