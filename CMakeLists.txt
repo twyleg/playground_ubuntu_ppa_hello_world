@@ -17,7 +17,7 @@ add_subdirectory(libs/)
 add_subdirectory(apps/hello_world_example/)
 
 # Unit-Test
-add_subdirectory(unit_tests/)
+add_subdirectory(tests/unit_tests/)
 
 # Include install config
 include(cmake/cmake_install.cmake)

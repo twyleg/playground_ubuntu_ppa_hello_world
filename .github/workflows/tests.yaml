@@ -24,10 +24,30 @@ jobs:
         make -j3
     - name: 'Run tests'
       run: |
-        cd build/unit_tests/
+        cd build/tests/unit_tests/
         ./unit_tests
-        
-  smoke-tests-linux:
+
+  smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout repository'
+      uses: actions/checkout@v3
+      with:
+        submodules: true
+    - name: 'Install dependencies'
+      run: sudo bash scripts/install_dependencies_debian_ubuntu.sh
+    - name: 'Build'
+      run: |
+        mkdir build/
+        cd build/
+        cmake ..
+        make -j3
+    - name: 'Run smoke test'
+      run: |
+        cd build/apps/hello_world_example/
+        ./hello_world_example
+
+  build-tests-linux:
     strategy:
       fail-fast: false
       matrix:
@@ -35,27 +55,10 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ${{ matrix.image }}
-      env:
-        TZ: Europe/Berlin
     steps:
-    - name: 'Install git (Ubuntu, Debian)'
-      if: ${{ contains(fromJSON('["ubuntu:focal", "ubuntu:jammy", "debian:latest"]'), matrix.image) }}
-      run: apt-get update && apt-get install -y git
-    - name: 'Install git (Arch)'
-      if: ${{ contains('archlinux:latest', matrix.image) }}
-      run: pacman -Syu --noconfirm git
-    - name: 'Checkout repository'
-      uses: actions/checkout@v3
+    - uses: ./.github/actions/setup-test-container
       with:
-        submodules: true
-    - name: Setup timezone
-      run: ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-    - name: 'Install dependencies (Ubuntu, Debian)'
-      if: ${{ contains(fromJSON('["ubuntu:focal", "ubuntu:jammy", "debian:latest"]'), matrix.image) }}
-      run:  bash scripts/install_dependencies_debian_ubuntu.sh
-    - name: 'Install dependencies (Arch)'
-      if: ${{ contains('archlinux:latest', matrix.image) }}
-      run: bash scripts/install_dependencies_arch.sh
+        image: ${{ matrix.image }}
     - name: 'Build and install'
       run: |
         mkdir build/
@@ -70,21 +73,21 @@ jobs:
         ./hello_world_example
     - name: 'Run smoke-test: External application - Library pulled in as submodule'
       run: |
-        cd examples/use_lib_as_local_target_example/
+        cd tests/build_tests/test_lib_as_local_target/
         mkdir build
         cd build/
         cmake ..
         cmake --build . -- -j3
-        ldd ./use_lib_as_local_target_example
-        ./use_lib_as_local_target_example
+        ldd ./test_lib_as_local_target
+        ./test_lib_as_local_target
     - name: 'Run smoke-test: External application - Library pulled in as system library via find_package'
       run: |
-        cd examples/use_lib_as_system_lib_example/
+        cd tests/build_tests/test_lib_as_system_lib/
         mkdir build
         cd build/
         cmake ..
         cmake --build . -- -j3
-        ldd ./use_lib_as_system_lib_example
-        ./use_lib_as_system_lib_example
+        ldd ./test_lib_as_system_lib
+        ./test_lib_as_system_lib
 
 
