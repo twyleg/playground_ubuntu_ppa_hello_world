@@ -6,7 +6,8 @@ set(TARGET_NAME use_lib_as_local_target_example)
 project(${TARGET_NAME})
 
 
-add_subdirectory(external/hello_world/libs)
+add_subdirectory(external/simple_cpp_project/)
+add_subdirectory(external/hello_world/libs/)
 
 
 #

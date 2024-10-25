@@ -46,7 +46,7 @@ install(
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
     "HelloWorldConfigVersion.cmake"
-    VERSION 0.0.1
+    VERSION ${VERSION_NUMBER}
     COMPATIBILITY AnyNewerVersion
 )
 
