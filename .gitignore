@@ -1,5 +1,6 @@
 build/
 logs/
+.artifacts/
 **/build
 
 **/*.kate-swp

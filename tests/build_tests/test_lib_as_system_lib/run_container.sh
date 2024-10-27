@@ -7,4 +7,4 @@ fi
 
 SCRIPT_DIR="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
-docker run -v "$SCRIPT_DIR"/:/example -v "$SCRIPT_DIR"/../../:/hello_world -it ubuntu:oracular /bin/bash -c "bash /example/build_in_container.sh; bash"
+docker run -v "$SCRIPT_DIR"/../../../:/workspace -it ubuntu:jammy /bin/bash -c "bash /workspace/tests/build_tests/test_lib_as_system_lib/build_in_container.sh; bash"

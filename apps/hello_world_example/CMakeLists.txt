@@ -1,6 +1,8 @@
 # Copyright (C) 2024 twyleg
+set(TARGET_NAME hello_world_example)
 
-simple_cpp_project_create_application(hello_world_example
+simple_cpp_project_create_application(
+    ${TARGET_NAME}
     SOURCES
         main.cc
     PROPERTIES

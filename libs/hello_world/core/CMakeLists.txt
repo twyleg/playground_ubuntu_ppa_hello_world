@@ -26,8 +26,6 @@ simple_cpp_project_create_library(
         ${CMAKE_CURRENT_SOURCE_DIR}/../../
     FIND_PACKAGES
         "fmt REQUIRED"
-        "Boost COMPONENTS REQUIRED system"
     LINK_LIBRARIES
         PUBLIC fmt::fmt
-        PRIVATE Boost::system
 )

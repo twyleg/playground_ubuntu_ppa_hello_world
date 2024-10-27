@@ -11,21 +11,19 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: 'Install git (Ubuntu, Debian)'
-      if: ${{ contains(fromJSON('["ubuntu:focal", "ubuntu:jammy", "debian:latest"]'), inputs.image) }}
-      run: apt-get update && apt-get install -y git
-    - name: 'Install git (Arch)'
-      if: ${{ contains('archlinux:latest', inputs.image) }}
-      run: pacman -Syu --noconfirm git
-    - name: 'Checkout repository'
-      uses: actions/checkout@v3
-      with:
-        submodules: true
     - name: Setup timezone
       run: ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
     - name: 'Install dependencies (Ubuntu, Debian)'
       if: ${{ contains(fromJSON('["ubuntu:focal", "ubuntu:jammy", "debian:latest"]'), inputs.image) }}
-      run: bash scripts/install_dependencies_debian_ubuntu.sh
+      run: |
+        bash scripts/install_dependencies_debian_ubuntu.sh
+        apt-get install -y curl
+        curl -fsSL https://deb.nodesource.com/setup_23.x -o nodesource_setup.sh
+        bash ./nodesource_setup.sh
+        rm nodesource_setup.sh
+        apt-get install -y nodejs
     - name: 'Install dependencies (Arch)'
       if: ${{ contains('archlinux:latest', inputs.image) }}
-      run: bash scripts/install_dependencies_arch.sh
+      run: |
+        bash scripts/install_dependencies_arch.sh
+        pacman -Suy --noconfirm nodejs

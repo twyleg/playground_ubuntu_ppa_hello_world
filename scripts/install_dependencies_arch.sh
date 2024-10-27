@@ -9,6 +9,4 @@ pacman -Suy --noconfirm \
 	make \
 	cmake \
 	gcc \
-	fmt \
-	boost \
-	boost-libs
+        fmt
