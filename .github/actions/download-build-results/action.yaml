@@ -13,5 +13,6 @@ runs:
       with:
         name: ${{ env.artifact_name }}
     - name: 'Install binaries system wide'
+      shell: bash
       run: |
         tar xf output.tar.gz --directory=/

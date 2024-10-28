@@ -10,7 +10,9 @@ runs:
   steps:
     - name: Setup timezone
       shell: bash
-      run: ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+      run: |
+        ln -snf /usr/share/zoneinfo/$TZ /etc/localtime || true
+        echo $TZ > /etc/timezone || true
     - name: 'Install dependencies (Ubuntu, Debian)'
       shell: bash
       if: ${{ contains(fromJSON('["ubuntu:focal", "ubuntu:jammy", "ubuntu:latest", "debian:latest"]'), env.image) }}
