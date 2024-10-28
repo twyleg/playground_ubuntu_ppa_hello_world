@@ -1,9 +1,5 @@
 name: "Upload build results"
 description: "Upload build results as an artifact."
-inputs:
-  image:
-    description: "The OS image that is running"
-    required: true
 runs:
   using: "composite"
   steps:
@@ -16,7 +12,7 @@ runs:
     - name: 'Set artifact name'
       shell: bash
       id: set_artifact_name
-      run: echo "artifact_name=output_${{ inputs.image }}" | sed 's/:/_/g' >> $GITHUB_ENV
+      run: echo "artifact_name=output_${{ env.image }}" | sed 's/:/_/g' >> $GITHUB_ENV
     - name: 'Upload binaries'
       uses: actions/upload-artifact@v4
       with:

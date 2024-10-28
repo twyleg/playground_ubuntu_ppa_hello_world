@@ -13,4 +13,5 @@ pacman -Suy --noconfirm \
         git \
         make \
         cmake \
-        gcc
+        gcc \
+        nodejs

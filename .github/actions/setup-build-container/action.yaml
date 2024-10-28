@@ -1,10 +1,6 @@
 name: "Setup test container"
 description: "Set up test container by installing git, cloning repo and installing dependencies."
 inputs:
-  image:
-    description: "The OS image to use in the container"
-    default: "ubuntu:latest"
-    required: false
   TZ:
     description: "Timezone"
     default: "Europe/Berlin"
@@ -17,12 +13,12 @@ runs:
       run: ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
     - name: 'Install dependencies (Ubuntu, Debian)'
       shell: bash
-      if: ${{ contains(fromJSON('["ubuntu:focal", "ubuntu:jammy", "ubuntu:latest", "debian:latest"]'), inputs.image) }}
+      if: ${{ contains(fromJSON('["ubuntu:focal", "ubuntu:jammy", "ubuntu:latest", "debian:latest"]'), env.image) }}
       run: |
         bash scripts/install_build_dependencies_debian_ubuntu.sh
     - name: 'Install dependencies (Arch)'
       shell: bash
-      if: ${{ contains('archlinux:latest', inputs.image) }}
+      if: ${{ contains('archlinux:latest', env.image) }}
       run: |
         bash scripts/install_build_dependencies_arch.sh
     - name: 'Checkout repository with submodules'
