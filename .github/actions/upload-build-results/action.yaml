@@ -1,0 +1,25 @@
+name: "Upload build results"
+description: "Upload build results as an artifact."
+inputs:
+  image:
+    description: "The OS image that is running"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: "Pack"
+      shell: bash
+      run: |
+        cd build/
+        cmake --install . --prefix install/usr
+        tar czf output.tar.gz --directory=install .
+    - name: 'Set artifact name'
+      shell: bash
+      id: set_artifact_name
+      run: echo "artifact_name=output_${{ inputs.image }}" | sed 's/:/_/g' >> $GITHUB_ENV
+    - name: 'Upload binaries'
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.artifact_name }}
+        path: build/output.tar.gz
+        retention-days: 1

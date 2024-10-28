@@ -1,0 +1,22 @@
+name: "Download and install build results"
+description: "Download and unpack build results from previous job as artifact."
+inputs:
+  image:
+    description: "The OS image that is running"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: 'Set artifact name'
+      shell: bash
+      id: set_artifact_name
+      run: |
+        echo "artifact_name=output_${{ inputs.image }}" | sed 's/:/_/g' >> $GITHUB_ENV
+    - name: 'Download binaries from previous build step'
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ env.artifact_name }}
+    - name: 'Install binaries system wide'
+      run: |
+        tar xf output.tar.gz --directory=/
+

@@ -1,0 +1,13 @@
+name: "Build project"
+description: "Build the project and upload (optional) as an artifact."
+runs:
+  using: "composite"
+  steps:
+    - name: "Build"
+      shell: bash
+      run: |
+        mkdir build/
+        cd build/
+        cmake ..
+        make -j3
+

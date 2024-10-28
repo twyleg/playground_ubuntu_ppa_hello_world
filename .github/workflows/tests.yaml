@@ -12,16 +12,10 @@ jobs:
     steps:
     - name: 'Checkout repository'
       uses: actions/checkout@v3
-      with:
-        submodules: true
-    - name: 'Install dependencies'
-      run: sudo bash scripts/install_build_dependencies_debian_ubuntu.sh
+    - name: 'Setup container'
+      uses: ./.github/actions/setup-build-container
     - name: 'Build'
-      run: |
-        mkdir build/
-        cd build/
-        cmake ..
-        make -j3
+      uses: ./.github/actions/build-project
     - name: 'Run tests'
       run: |
         cd build/tests/unit_tests/
@@ -32,16 +26,10 @@ jobs:
     steps:
     - name: 'Checkout repository'
       uses: actions/checkout@v3
-      with:
-        submodules: true
-    - name: 'Install dependencies'
-      run: sudo bash scripts/install_build_dependencies_debian_ubuntu.sh
+    - name: 'Setup container'
+      uses: ./.github/actions/setup-build-container
     - name: 'Build'
-      run: |
-        mkdir build/
-        cd build/
-        cmake ..
-        make -j3
+      uses: ./.github/actions/build-project
     - name: 'Run smoke test'
       run: |
         cd build/apps/hello_world_example/
@@ -59,26 +47,15 @@ jobs:
     - name: 'Checkout repository'
       uses: actions/checkout@v3
     - name: 'Setup container'
-      uses: ./.github/actions/setup-test-container
+      uses: ./.github/actions/setup-build-container
       with:
         image: ${{ matrix.image }}
-    - name: 'Build and pack binaries'
-      run: |
-        mkdir build/
-        cd build/
-        cmake .. -DBUILD_SHARED_LIBS=ON
-        cmake --build . -- -j3
-        cmake --install . --prefix install/usr
-        tar czf output.tar.gz --directory=install .
-    - name: 'Set artifact name'
-      id: set_artifact_name
-      run: echo "artifact_name=output_${{ matrix.image }}" | sed 's/:/_/g' >> $GITHUB_ENV
-    - name: 'Upload binaries'
-      uses: actions/upload-artifact@v4
+    - name: 'Build'
+      uses: ./.github/actions/build-project
+    - name: 'Upload as artifact'
+      uses: ./.github/actions/upload-build-results
       with:
-        name: ${{ env.artifact_name }}
-        path: build/output.tar.gz
-        retention-days: 1
+        image: ${{ matrix.image }}
 
   build-tests-linux-use:
     needs: build-tests-linux-build
@@ -93,19 +70,13 @@ jobs:
     - name: 'Checkout repository'
       uses: actions/checkout@v3
     - name: 'Setup container'
-      uses: ./.github/actions/setup-test-container
+      uses: ./.github/actions/setup-build-container
       with:
         image: ${{ matrix.image }}
-    - name: 'Set artifact name'
-      id: set_artifact_name
-      run: echo "artifact_name=output_${{ matrix.image }}" | sed 's/:/_/g' >> $GITHUB_ENV
-    - name: 'Download binaries from previous build step'
-      uses: actions/download-artifact@v4
+    - name: 'Download and install build results from previous job'
+      uses: ./.github/actions/download-build-results
       with:
-        name: ${{ env.artifact_name }}
-    - name: 'Install binaries system wide'
-      run: |
-        tar xf output.tar.gz --directory=/
+        image: ${{ matrix.image }}
     - name: 'Run build-test: External application - Library pulled in as system library via find_package'
       run: |
         mkdir -p tests/build_tests/test_lib_as_system_lib/build/
