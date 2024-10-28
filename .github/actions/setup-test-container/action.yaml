@@ -23,7 +23,7 @@ runs:
         curl -fsSL https://deb.nodesource.com/setup_23.x -o nodesource_setup.sh
         bash ./nodesource_setup.sh
         rm nodesource_setup.sh
-        apt-get install -y nodejs tree
+        apt-get install -y nodejs
     - name: 'Install dependencies (Arch)'
       shell: bash
       if: ${{ contains('archlinux:latest', inputs.image) }}
@@ -34,8 +34,3 @@ runs:
       uses: actions/checkout@v3
       with:
         submodules: true
-    - name: 'Debug'
-      shell: bash
-      run: |
-        tree
-        git status
