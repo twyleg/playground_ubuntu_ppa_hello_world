@@ -18,18 +18,12 @@ runs:
       shell: bash
       if: ${{ contains(fromJSON('["ubuntu:focal", "ubuntu:jammy", "debian:latest"]'), inputs.image) }}
       run: |
-        bash scripts/install_dependencies_debian_ubuntu.sh
-        apt-get install -y curl
-        curl -fsSL https://deb.nodesource.com/setup_23.x -o nodesource_setup.sh
-        bash ./nodesource_setup.sh
-        rm nodesource_setup.sh
-        apt-get install -y nodejs
+        bash scripts/install_build_dependencies_debian_ubuntu.sh
     - name: 'Install dependencies (Arch)'
       shell: bash
       if: ${{ contains('archlinux:latest', inputs.image) }}
       run: |
-        bash scripts/install_dependencies_arch.sh
-        pacman -Suy --noconfirm nodejs
+        bash scripts/install_build_dependencies_arch.sh
     - name: 'Checkout repository with submodules'
       uses: actions/checkout@v3
       with:

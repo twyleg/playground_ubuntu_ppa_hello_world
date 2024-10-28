@@ -15,7 +15,7 @@ jobs:
       with:
         submodules: true
     - name: 'Install dependencies'
-      run: sudo bash scripts/install_dependencies_debian_ubuntu.sh
+      run: sudo bash scripts/install_build_dependencies_debian_ubuntu.sh
     - name: 'Build'
       run: |
         mkdir build/
@@ -35,7 +35,7 @@ jobs:
       with:
         submodules: true
     - name: 'Install dependencies'
-      run: sudo bash scripts/install_dependencies_debian_ubuntu.sh
+      run: sudo bash scripts/install_build_dependencies_debian_ubuntu.sh
     - name: 'Build'
       run: |
         mkdir build/
