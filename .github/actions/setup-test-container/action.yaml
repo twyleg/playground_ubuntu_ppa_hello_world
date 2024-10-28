@@ -12,8 +12,10 @@ runs:
   using: "composite"
   steps:
     - name: Setup timezone
+      shell: bash
       run: ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
     - name: 'Install dependencies (Ubuntu, Debian)'
+      shell: bash
       if: ${{ contains(fromJSON('["ubuntu:focal", "ubuntu:jammy", "debian:latest"]'), inputs.image) }}
       run: |
         bash scripts/install_dependencies_debian_ubuntu.sh
@@ -23,6 +25,7 @@ runs:
         rm nodesource_setup.sh
         apt-get install -y nodejs tree
     - name: 'Install dependencies (Arch)'
+      shell: bash
       if: ${{ contains('archlinux:latest', inputs.image) }}
       run: |
         bash scripts/install_dependencies_arch.sh
@@ -32,6 +35,7 @@ runs:
       with:
         submodules: true
     - name: 'Debug'
+      shell: bash
       run: |
         tree
         git status
