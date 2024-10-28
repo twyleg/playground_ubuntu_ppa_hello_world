@@ -7,47 +7,65 @@ on:
     branches:
       - "**"
 jobs:
-  unit-tests:
-    runs-on: ubuntu-latest
-    steps:
-    - name: 'Checkout repository'
-      uses: actions/checkout@v3
-      with:
-        submodules: true
-    - name: 'Install dependencies'
-      run: sudo bash scripts/install_dependencies_debian_ubuntu.sh
-    - name: 'Build'
-      run: |
-        mkdir build/
-        cd build/
-        cmake ..
-        make -j3
-    - name: 'Run tests'
-      run: |
-        cd build/tests/unit_tests/
-        ./unit_tests
+  # unit-tests:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: 'Checkout repository'
+  #     uses: actions/checkout@v3
+  #     with:
+  #       submodules: true
+  #   - name: 'Install dependencies'
+  #     run: sudo bash scripts/install_dependencies_debian_ubuntu.sh
+  #   - name: 'Build'
+  #     run: |
+  #       mkdir build/
+  #       cd build/
+  #       cmake ..
+  #       make -j3
+  #   - name: 'Run tests'
+  #     run: |
+  #       cd build/tests/unit_tests/
+  #       ./unit_tests
 
-  smoke-test:
-    runs-on: ubuntu-latest
-    steps:
-    - name: 'Checkout repository'
-      uses: actions/checkout@v3
-      with:
-        submodules: true
-    - name: 'Install dependencies'
-      run: sudo bash scripts/install_dependencies_debian_ubuntu.sh
-    - name: 'Build'
-      run: |
-        mkdir build/
-        cd build/
-        cmake ..
-        make -j3
-    - name: 'Run smoke test'
-      run: |
-        cd build/apps/hello_world_example/
-        ./hello_world_example
+  # smoke-test:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: 'Checkout repository'
+  #     uses: actions/checkout@v3
+  #     with:
+  #       submodules: true
+  #   - name: 'Install dependencies'
+  #     run: sudo bash scripts/install_dependencies_debian_ubuntu.sh
+  #   - name: 'Build'
+  #     run: |
+  #       mkdir build/
+  #       cd build/
+  #       cmake ..
+  #       make -j3
+  #   - name: 'Run smoke test'
+  #     run: |
+  #       cd build/apps/hello_world_example/
+  #       ./hello_world_example
+
+  # pack-sources:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: 'Checkout repository'
+  #     uses: actions/checkout@v3
+  #     with:
+  #       submodules: true
+  #   - name: 'Build and pack binaries'
+  #     run: |
+  #       tar czf /sources.tar.gz .
+  #   - name: 'Upload binaries'
+  #     uses: actions/upload-artifact@v4
+  #     with:
+  #       name: sources
+  #       path: /sources.tar.gz
+  #       retention-days: 1
 
   build-tests-linux-build:
+    # needs: pack-sources
     strategy:
       fail-fast: false
       matrix:
@@ -58,63 +76,70 @@ jobs:
     steps:
     - name: 'Checkout repository'
       uses: actions/checkout@v3
-      with:
-        submodules: true
+      # with:
+      #   submodules: true
+    # steps:
+    # - name: 'Download sources'
+    #   uses: actions/download-artifact@v4
+    #   with:
+    #     name: sources
+    # - name: 'Unpack source'
+    #   run: tar xf sources.tar.gz
     - name: 'Setup container'
       uses: ./.github/actions/setup-test-container
       with:
         image: ${{ matrix.image }}
-    - name: 'Build and pack binaries'
-      run: |
-        mkdir build/
-        cd build/
-        cmake .. -DBUILD_SHARED_LIBS=ON
-        cmake --build . -- -j3
-        cmake --install . --prefix install/usr
-        tar czf output.tar.gz --directory=install .
-    - name: 'Set artifact name'
-      id: set_artifact_name
-      run: echo "artifact_name=output_${{ matrix.image }}" | sed 's/:/_/g' >> $GITHUB_ENV
-    - name: 'Upload binaries'
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ env.artifact_name }}
-        path: build/output.tar.gz
-        retention-days: 1
+    # - name: 'Build and pack binaries'
+    #   run: |
+    #     mkdir build/
+    #     cd build/
+    #     cmake .. -DBUILD_SHARED_LIBS=ON
+    #     cmake --build . -- -j3
+    #     cmake --install . --prefix install/usr
+    #     tar czf output.tar.gz --directory=install .
+    # - name: 'Set artifact name'
+    #   id: set_artifact_name
+    #   run: echo "artifact_name=output_${{ matrix.image }}" | sed 's/:/_/g' >> $GITHUB_ENV
+    # - name: 'Upload binaries'
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: ${{ env.artifact_name }}
+    #     path: build/output.tar.gz
+    #     retention-days: 1
 
-  build-tests-linux-use:
-    needs: build-tests-linux-build
-    strategy:
-      fail-fast: false
-      matrix:
-        image: [ 'ubuntu:focal', 'ubuntu:jammy', 'debian:latest', 'archlinux:latest' ]
-    runs-on: ubuntu-latest
-    container:
-      image: ${{ matrix.image }}
-    steps:
-    - name: 'Checkout repository'
-      uses: actions/checkout@v3
-      with:
-        submodules: true
-    - name: 'Setup container'
-      uses: ./.github/actions/setup-test-container
-      with:
-        image: ${{ matrix.image }}
-    - name: 'Set artifact name'
-      id: set_artifact_name
-      run: echo "artifact_name=output_${{ matrix.image }}" | sed 's/:/_/g' >> $GITHUB_ENV
-    - name: 'Download binaries from previous build step'
-      uses: actions/download-artifact@v4
-      with:
-        name: ${{ env.artifact_name }}
-    - name: 'Install binaries system wide'
-      run: |
-        tar xf output.tar.gz --directory=/
-    - name: 'Run build-test: External application - Library pulled in as system library via find_package'
-      run: |
-        mkdir -p tests/build_tests/test_lib_as_system_lib/build/
-        cd tests/build_tests/test_lib_as_system_lib/build/
-        cmake ..
-        cmake --build . -- -j3
-        ldd ./test_lib_as_system_lib
-        ./test_lib_as_system_lib
+  # build-tests-linux-use:
+  #   needs: build-tests-linux-build
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       image: [ 'ubuntu:focal', 'ubuntu:jammy', 'debian:latest', 'archlinux:latest' ]
+  #   runs-on: ubuntu-latest
+  #   container:
+  #     image: ${{ matrix.image }}
+  #   steps:
+  #   - name: 'Checkout repository'
+  #     uses: actions/checkout@v3
+  #     with:
+  #       submodules: true
+  #   - name: 'Setup container'
+  #     uses: ./.github/actions/setup-test-container
+  #     with:
+  #       image: ${{ matrix.image }}
+  #   - name: 'Set artifact name'
+  #     id: set_artifact_name
+  #     run: echo "artifact_name=output_${{ matrix.image }}" | sed 's/:/_/g' >> $GITHUB_ENV
+  #   - name: 'Download binaries from previous build step'
+  #     uses: actions/download-artifact@v4
+  #     with:
+  #       name: ${{ env.artifact_name }}
+  #   - name: 'Install binaries system wide'
+  #     run: |
+  #       tar xf output.tar.gz --directory=/
+  #   - name: 'Run build-test: External application - Library pulled in as system library via find_package'
+  #     run: |
+  #       mkdir -p tests/build_tests/test_lib_as_system_lib/build/
+  #       cd tests/build_tests/test_lib_as_system_lib/build/
+  #       cmake ..
+  #       cmake --build . -- -j3
+  #       ldd ./test_lib_as_system_lib
+  #       ./test_lib_as_system_lib

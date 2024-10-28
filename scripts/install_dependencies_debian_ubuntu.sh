@@ -7,6 +7,7 @@ fi
 
 apt-get update
 apt-get install -y \
+        git \
         build-essential \
         cmake \
         g++ \

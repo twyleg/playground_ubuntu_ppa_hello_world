@@ -6,7 +6,8 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 pacman -Suy --noconfirm \
-	make \
-	cmake \
-	gcc \
+        git \
+        make \
+        cmake \
+        gcc \
         fmt
